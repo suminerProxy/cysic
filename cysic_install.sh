@@ -26,6 +26,7 @@ fi
 if ! command -v pm2 &> /dev/null; then
   echo "未检测到 pm2，正在通过 npm 全局安装 pm2..."
   npm install -g pm2
+  pm2 startup
   echo "pm2 安装完成，版本：$(pm2 -v)"
 else
   echo "pm2 已安装，版本：$(pm2 -v)"
@@ -34,4 +35,8 @@ fi
 echo "开始安装cysic"
 
 curl -L https://github.com/cysic-labs/phase2_libs/releases/download/v1.0.0/setup_linux.sh > ~/setup_linux.sh && bash ~/setup_linux.sh $1
-cd ~/cysic-verifier/ && bash start.sh
+cd ~/cysic-verifier/
+wget https://raw.githubusercontent.com/suminerProxy/cysic/refs/heads/main/cysic.config.js
+pm2 start cysic.config.js
+pm2 save
+echo "安装完成，请查看日志：pm2 log"
